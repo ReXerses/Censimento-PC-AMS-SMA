@@ -23,7 +23,7 @@ function FormInserimento({gestisciForm}) {
   });
 
   const [currentComputer, setCurrentComputer] = useState({
-    pc: "000",
+    pc: 9999,
     modelloPc: "",
     MAC: "",
     windows: "",
@@ -47,7 +47,7 @@ function FormInserimento({gestisciForm}) {
   });
 
   const [currentSIM, setCurrentSIM] = useState({
-    numero: "000",
+    numero: "999",
     promozioneAttiva: "",
     necessita: "",
   });
@@ -319,7 +319,7 @@ function FormInserimento({gestisciForm}) {
               type="number"
               name="pc"
               placeholder="Numero PC"
-              value={currentComputer.pc}
+              value={currentComputer.pc || 9999}
               onChange={handleComputerChange}
             />
             <input
@@ -444,7 +444,7 @@ function FormInserimento({gestisciForm}) {
               type="text"
               name="numero"
               placeholder="Numero SIM"
-              value={currentSIM.numero}
+              value={currentSIM.numero || "999"}
               onChange={handleSIMChange}
             />
             <input

@@ -63,8 +63,8 @@ function CensimentoPC() {
   const filteredData = pcData.filter(
     (pc) => 
       pc.dipendente.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      String(pc.computers[0].pc).includes(searchQuery) || 
-      String(pc.schedeSIM[0].numero).includes(searchQuery)
+      String(pc?.computers?.[0]?.pc || "").includes(searchQuery) || 
+      String(pc?.schedeSIM?.[0]?.numero || "").includes(searchQuery)
   );
 
   const handleDelete = (id) => {
@@ -157,7 +157,7 @@ function CensimentoPC() {
                     <span className="elemento"> {pc.azienda || "Non disponibile"} </span>
                     <span className="elemento"> {pc.mansione || "Non disponibile"} </span>
                     <span className="elemento"> {pc.TelInterno || "Non disponibile"} </span>
-                    <span className="elemento"> {pc.computers[0]? pc.computers[0].pc : "Nessun Pc"} </span>
+                    <span className="elemento"> {pc.computers[0] ? pc.computers[0].pc : "No PC"} </span>
                     <span className="elemento"> {pc.SimAziendale ? "Sì" : "No"} </span>
                     <span className="elemento"> {pc.dispositiviMobili ? "Sì" : "No"} </span>
                     <span className="elemento"> {pc.VpnSophos ? "Sì" : "No"} </span>
