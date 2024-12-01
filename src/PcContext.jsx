@@ -5,7 +5,6 @@ export const PcContext = createContext();
 
 // Provider per gestire lo stato globale
 export const PcProvider = ({ children }) => {
-    
   const [pcData, setPcData] = useState(() => {
     // Recupera i dati dal localStorage (o usa un array vuoto come default)
     const storedData = localStorage.getItem("pcData");
@@ -22,7 +21,7 @@ export const PcProvider = ({ children }) => {
   };
 
   return (
-    <PcContext.Provider value={{ pcData, aggiungiPC }}>
+    <PcContext.Provider value={{ pcData, setPcData, aggiungiPC }}>
       {children}
     </PcContext.Provider>
   );

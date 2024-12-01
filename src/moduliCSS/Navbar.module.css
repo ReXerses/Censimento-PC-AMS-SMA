@@ -1,0 +1,19 @@
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 0rem 1rem;
+    column-gap: 2rem;
+    background: linear-gradient(269deg, rgb(255 236 12), rgb(0 0 0 / 50%) 50%, rgb(15 77 161 / 90%) 100%);
+}
+
+.titolo {
+    font-size: 3rem;
+    color: white;
+    margin: 0;
+}
+
+.logo {
+    height: 70px;
+    padding: 10px;
+}
