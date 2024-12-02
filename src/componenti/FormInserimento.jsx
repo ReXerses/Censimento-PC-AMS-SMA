@@ -23,7 +23,7 @@ function FormInserimento({gestisciForm}) {
   });
 
   const [currentComputer, setCurrentComputer] = useState({
-    pc: 9999,
+    pc: "",
     modelloPc: "",
     MAC: "",
     windows: "",
@@ -47,7 +47,7 @@ function FormInserimento({gestisciForm}) {
   });
 
   const [currentSIM, setCurrentSIM] = useState({
-    numero: "999",
+    numero: "",
     promozioneAttiva: "",
     necessita: "",
   });
@@ -314,159 +314,192 @@ function FormInserimento({gestisciForm}) {
 
         {step === 2 && formData.haiPc && (
           <>
-            <h3>Aggiungi Computer</h3>
-            <input
-              type="number"
-              name="pc"
-              placeholder="Numero PC"
-              value={currentComputer.pc || 9999}
-              onChange={handleComputerChange}
-            />
-            <input
-              type="text"
-              name="modelloPc"
-              placeholder="Modello PC"
-              value={currentComputer.modelloPc}
-              onChange={handleComputerChange}
-            />
-            <input
-              type="text"
-              name="MAC"
-              placeholder="MAC"
-              value={currentComputer.MAC}
-              onChange={handleComputerChange}
-            />
-            <input
-              type="text"
-              name="windows"
-              placeholder="Edizione Windows"
-              value={currentComputer.windows}
-              onChange={handleComputerChange}
-            />
-            <input
-              type="text"
-              name="windowsUpdate"
-              placeholder="Update Windows"
-              value={currentComputer.windowsUpdate}
-              onChange={handleComputerChange}
-            />
-            <input
-              type="text"
-              name="CPU"
-              placeholder="CPU"
-              value={currentComputer.CPU}
-              onChange={handleComputerChange}
-            />
-            <input
-              type="text"
-              name="GPU"
-              placeholder="GPU"
-              value={currentComputer.GPU}
-              onChange={handleComputerChange}
-            />
-            <input
-              type="text"
-              name="RAM"
-              placeholder="RAM"
-              value={currentComputer.RAM}
-              onChange={handleComputerChange}
-            />
-            <button type="button" onClick={addComputer}>
-              Aggiungi Computer
-            </button>
+            
             <h3>Aggiungi Programmi</h3>
-            <input
-              type="text"
-              name="programma"
-              placeholder="Nome Programma"
-              value={currentProgramma.programma}
-              onChange={handleProgrammaChange}
-            />
-            <input
-              type="text"
-              name="versione"
-              placeholder="Versione"
-              value={currentProgramma.versione}
-              onChange={handleProgrammaChange}
-            />
-            <textarea
-              name="configurazioni"
-              placeholder="Configurazioni Speciali"
-              value={currentProgramma.configurazioni}
-              onChange={handleProgrammaChange}
-            />
-            <button type="button" onClick={addProgramma}>
-              Aggiungi Programma
-            </button>
-            <button type="button" onClick={() => setStep(3)}>
-              Avanti
-            </button>
+            <div className="infoBase">
+              <div className="primaRiga">
+                <input
+                  type="text"
+                  name="programma"
+                  placeholder="Nome Programma"
+                  value={currentProgramma.programma}
+                  onChange={handleProgrammaChange}
+                />
+                <input
+                  type="text"
+                  name="versione"
+                  placeholder="Versione"
+                  value={currentProgramma.versione}
+                  onChange={handleProgrammaChange}
+                />
+              </div>
+              <div className="secondaRiga">
+                <textarea
+                  name="configurazioni"
+                  placeholder="Configurazioni Speciali"
+                  value={currentProgramma.configurazioni}
+                  onChange={handleProgrammaChange}
+                />
+                
+              </div>
+              <button type="button" onClick={addProgramma}>
+                  Aggiungi Programma
+                </button>
+            </div>
+            
+            <h3>Aggiungi Computer</h3>
+            <div className="infoBase">
+              <div className="primaRiga">
+                <input
+                  type="number"
+                  name="pc"
+                  placeholder="Numero PC"
+                  value={currentComputer.pc}
+                  onChange={handleComputerChange}
+                />
+                <input
+                  type="text"
+                  name="modelloPc"
+                  placeholder="Modello PC"
+                  value={currentComputer.modelloPc}
+                  onChange={handleComputerChange}
+                />
+                <input
+                  type="text"
+                  name="MAC"
+                  placeholder="MAC"
+                  value={currentComputer.MAC}
+                  onChange={handleComputerChange}
+                />
+                <input
+                  type="text"
+                  name="windows"
+                  placeholder="Edizione Windows"
+                  value={currentComputer.windows}
+                  onChange={handleComputerChange}
+                />
+              </div>
+            
+              <div className="secondaRiga">
+                <input
+                  type="text"
+                  name="windowsUpdate"
+                  placeholder="Update Windows"
+                  value={currentComputer.windowsUpdate}
+                  onChange={handleComputerChange}
+                />
+                <input
+                  type="text"
+                  name="CPU"
+                  placeholder="CPU"
+                  value={currentComputer.CPU}
+                  onChange={handleComputerChange}
+                />
+                <input
+                  type="text"
+                  name="GPU"
+                  placeholder="GPU"
+                  value={currentComputer.GPU}
+                  onChange={handleComputerChange}
+                />
+                <input
+                  type="text"
+                  name="RAM"
+                  placeholder="RAM"
+                  value={currentComputer.RAM}
+                  onChange={handleComputerChange}
+                />
+              </div>
+            </div>
+            <div className="buttonsForm">
+              <button type="button" onClick={addComputer}>
+                Aggiungi PC
+              </button>
+              <button type="button" onClick={() => setStep(3)}>
+                Avanti
+              </button>
+            </div>
+        
           </>
         )}
 
         {step === 3 && formData.dispositiviMobili && (
           <>
             <h3>Aggiungi Smartphones o Tablets</h3>
-            <input
-              type="text"
-              name="modelloS_T"
-              placeholder="Modello dispositivo mobile"
-              value={currentSmart_tablet.modelloS_T}
-              onChange={handleSmart_TabletChange}
-            />
-            <input
-              type="text"
-              name="seriale"
-              placeholder="Seriale"
-              value={currentSmart_tablet.seriale}
-              onChange={handleSmart_TabletChange}
-            />
-            <input
-              type="text"
-              name="MAC"
-              placeholder="MAC"
-              value={currentSmart_tablet.MAC}
-              onChange={handleSmart_TabletChange}
-            />
-            <button type="button" onClick={addSmart_tablet}>
-              Aggiungi Dispositivo
-            </button>
-            <button type="button" onClick={() => setStep(4)}>
-              Avanti
-            </button>
+            <div className="infoBase">
+              <div className="primaRiga">
+                <input
+                  type="text"
+                  name="modelloS_T"
+                  placeholder="Modello dispositivo mobile"
+                  value={currentSmart_tablet.modelloS_T}
+                  onChange={handleSmart_TabletChange}
+                />
+                <input
+                  type="text"
+                  name="seriale"
+                  placeholder="Seriale"
+                  value={currentSmart_tablet.seriale}
+                  onChange={handleSmart_TabletChange}
+                />
+                <input
+                  type="text"
+                  name="MAC"
+                  placeholder="MAC"
+                  value={currentSmart_tablet.MAC}
+                  onChange={handleSmart_TabletChange}
+                />
+              </div>
+            </div>
+            <div className="buttonsForm">
+              <button type="button" onClick={addSmart_tablet}>
+                Aggiungi Dispositivo
+              </button>
+              <button type="button" onClick={() => setStep(4)}>
+                Avanti
+              </button>
+            </div>
+            
           </>
         )}
 
         {step === 4 && formData.SimAziendale && (
           <>
             <h3>Aggiungi SIM</h3>
-            <input
-              type="text"
-              name="numero"
-              placeholder="Numero SIM"
-              value={currentSIM.numero || "999"}
-              onChange={handleSIMChange}
-            />
-            <input
-              type="text"
-              name="promozioneAttiva"
-              placeholder="Promozione Attiva"
-              value={currentSIM.promozioneAttiva}
-              onChange={handleSIMChange}
-            />
-            <input
-              type="text"
-              name="necessita"
-              placeholder="Necessità"
-              value={currentSIM.necessita}
-              onChange={handleSIMChange}
-            />
-            <button type="button" onClick={addSIM}>
-              Aggiungi SIM
-            </button>
-            <button type="button" onClick={() => setStep(5)}>
-              Avanti
-            </button>
+            <div className="infoBase">
+              <div className="primaRiga">
+                <input
+                  type="text"
+                  name="numero"
+                  placeholder="Numero SIM"
+                  value={currentSIM.numero}
+                  onChange={handleSIMChange}
+                />
+                <input
+                  type="text"
+                  name="promozioneAttiva"
+                  placeholder="Promozione Attiva"
+                  value={currentSIM.promozioneAttiva}
+                  onChange={handleSIMChange}
+                />
+                <input
+                  type="text"
+                  name="necessita"
+                  placeholder="Necessità"
+                  value={currentSIM.necessita}
+                  onChange={handleSIMChange}
+                />
+              </div>
+            </div>
+            <div className="buttonsForm">
+              <button type="button" onClick={addSIM}>
+                Aggiungi SIM
+              </button>
+              <button type="button" onClick={() => setStep(5)}>
+                Avanti
+              </button>
+            </div>
+            
           </>
         )}
 

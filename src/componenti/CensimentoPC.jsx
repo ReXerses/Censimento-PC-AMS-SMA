@@ -124,6 +124,7 @@ function CensimentoPC() {
             <span className="elemento">SIM</span>
             <span className="elemento">Cell/tablet</span>
             <span className="elemento">VPN</span>
+            <div className="elemento">Azioni</div>
           </div>
           <p>Nessun risultato trovato</p>
         </div>
@@ -143,6 +144,7 @@ function CensimentoPC() {
                   <span className="elemento">SIM</span>
                   <span className="elemento">Cell/tablet</span>
                   <span className="elemento">VPN</span>
+                  <div className="elemento">Azioni</div>
                   
           </div>
             {filteredData.map((pc) => (
@@ -163,7 +165,7 @@ function CensimentoPC() {
                     <span className="elemento"> {pc.VpnSophos ? "Sì" : "No"} </span>
 
                     
-                    <div className="buttons">
+                    <div className="buttons elemento">
 
                       <button className="elemento edit" type="button" onClick={() => handleEdit(pc)}></button>
                       <button className="elemento view" type="button" onClick={() => handleView(pc)}></button>

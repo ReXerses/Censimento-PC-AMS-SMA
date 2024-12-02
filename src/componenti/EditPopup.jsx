@@ -2,6 +2,8 @@ import React, { useState } from "react";
 
 const EditPopup = ({ pc, onSave, onCancel }) => {
   const [editedPC, setEditedPC] = useState(pc);
+  const [isApertoComputers, setIsApertoComputers] = useState(true);
+  const [isApertoSmartTablets, setIsApertoSmartTablets] = useState(false);
 
   // Gestisce i cambiamenti dei campi principali
   const handleChange = (e) => {
@@ -59,112 +61,140 @@ const EditPopup = ({ pc, onSave, onCancel }) => {
             />
           </label>
 
-          <h4>Computers:</h4>
-          {editedPC.computers?.map((computer, index) => (
-            <div key={index}>
-              <label>
-                Modello PC:
-                <input
-                  type="text"
-                  value={computer.modelloPc || ""}
-                  onChange={(e) =>
-                    handleNestedChange(
-                      "computers",
-                      index,
-                      "modelloPc",
-                      e.target.value
-                    )
-                  }
-                />
-              </label>
-              <label>
-                MAC Address:
-                <input
-                  type="text"
-                  value={computer.MAC || ""}
-                  onChange={(e) =>
-                    handleNestedChange(
-                      "computers",
-                      index,
-                      "MAC",
-                      e.target.value
-                    )
-                  }
-                />
-              </label>
+          <div className="rigaDropDown">
+            <h4>Computers:</h4>
+            <button
+              type="button"
+              className={isApertoComputers ? "aperto" : "chiuso"}
+              onClick={() => setIsApertoComputers(!isApertoComputers)}
+            ></button>
+          </div>
+
+          {isApertoComputers && (
+            <div className="contenutoSezione">
+              {editedPC.computers?.map((computer, index) => (
+                <div key={index}>
+                  <label>
+                    Modello PC:
+                    <input
+                      type="text"
+                      value={computer.modelloPc || ""}
+                      onChange={(e) =>
+                        handleNestedChange(
+                          "computers",
+                          index,
+                          "modelloPc",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </label>
+                  <label>
+                    MAC Address:
+                    <input
+                      type="text"
+                      value={computer.MAC || ""}
+                      onChange={(e) =>
+                        handleNestedChange(
+                          "computers",
+                          index,
+                          "MAC",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => removeItem("computers", index)}
+                  >
+                    Rimuovi
+                  </button>
+                </div>
+              ))}
               <button
                 type="button"
-                onClick={() => removeItem("computers", index)}
+                onClick={() =>
+                  addItem("computers", {
+                    modelloPc: "",
+                    MAC: "",
+                    CPU: "",
+                    GPU: "",
+                    RAM: "",
+                  })
+                }
               >
-                Rimuovi
+                Aggiungi Computer
               </button>
             </div>
-          ))}
-          <button
-            type="button"
-            onClick={() =>
-              addItem("computers", {
-                modelloPc: "",
-                MAC: "",
-                CPU: "",
-                GPU: "",
-                RAM: "",
-              })
-            }
-          >
-            Aggiungi Computer
-          </button>
+          )}
 
-          <h4>Smartphone/Tablet:</h4>
-          {editedPC.smart_tablets?.map((tablet, index) => (
-            <div key={index}>
-              <label>
-                Modello:
-                <input
-                  type="text"
-                  value={tablet.modelloS_T || ""}
-                  onChange={(e) =>
-                    handleNestedChange(
-                      "smart_tablets",
-                      index,
-                      "modelloS_T",
-                      e.target.value
-                    )
-                  }
-                />
-              </label>
-              <label>
-                MAC Address:
-                <input
-                  type="text"
-                  value={tablet.MAC || ""}
-                  onChange={(e) =>
-                    handleNestedChange(
-                      "smart_tablets",
-                      index,
-                      "MAC",
-                      e.target.value
-                    )
-                  }
-                />
-              </label>
+          <div className="rigaDropDown">
+            <h4>Smartphone/Tablet:</h4>
+            <button
+              type="button"
+              className={isApertoSmartTablets ? "aperto" : "chiuso"}
+              onClick={() => setIsApertoSmartTablets(!isApertoSmartTablets)}
+            ></button>
+          </div>
+          {isApertoSmartTablets && (
+            <div className="contenutoSezione">
+              {editedPC.smart_tablets?.map((tablet, index) => (
+                <div key={index}>
+                  <label>
+                    Modello:
+                    <input
+                      type="text"
+                      value={tablet.modelloS_T || ""}
+                      onChange={(e) =>
+                        handleNestedChange(
+                          "smart_tablets",
+                          index,
+                          "modelloS_T",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </label>
+                  <label>
+                    MAC Address:
+                    <input
+                      type="text"
+                      value={tablet.MAC || ""}
+                      onChange={(e) =>
+                        handleNestedChange(
+                          "smart_tablets",
+                          index,
+                          "MAC",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => removeItem("smart_tablets", index)}
+                  >
+                    Rimuovi
+                  </button>
+                </div>
+              ))}
               <button
                 type="button"
-                onClick={() => removeItem("smart_tablets", index)}
+                onClick={() =>
+                  addItem("smart_tablets", {
+                    modelloS_T: "",
+                    MAC: "",
+                    seriale: "",
+                  })
+                }
               >
-                Rimuovi
+                Aggiungi Smartphone/Tablet
               </button>
             </div>
-          ))}
-          <button
-            type="button"
-            onClick={() =>
-              addItem("smart_tablets", { modelloS_T: "", MAC: "", seriale: "" })
-            }
-          >
-            Aggiungi Smartphone/Tablet
-          </button>
+          )}
 
+          {/* Pulsanti di conferma */}
           <button type="submit">Salva</button>
           <button type="button" onClick={onCancel}>
             Annulla
