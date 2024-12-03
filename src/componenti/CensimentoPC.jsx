@@ -158,7 +158,7 @@ function CensimentoPC() {
                     <span className="elemento"> {pc.dipendente || "Non disponibile"} </span>
                     <span className="elemento"> {pc.azienda || "Non disponibile"} </span>
                     <span className="elemento"> {pc.mansione || "Non disponibile"} </span>
-                    <span className="elemento"> {pc.TelInterno || "Non disponibile"} </span>
+                    <span className="elemento"> {pc.TelInterno[0]?.numero || "Non disponibile"} - {pc.TelInterno[1]?.numero} </span>
                     <span className="elemento"> {pc.computers[0] ? pc.computers[0].pc : "No PC"} </span>
                     <span className="elemento"> {pc.SimAziendale ? "Sì" : "No"} </span>
                     <span className="elemento"> {pc.dispositiviMobili ? "Sì" : "No"} </span>

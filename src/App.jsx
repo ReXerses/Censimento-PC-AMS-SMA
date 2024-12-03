@@ -2,7 +2,6 @@ import { useState } from "react";
 import Navbar from "./componenti/Navbar";
 import FormInserimento from "./componenti/FormInserimento";
 import CensimentoPC from "./componenti/CensimentoPC";
-import addPerson from '/src/assets/person_add.svg'
 import "./App.css";
 
 function App() {

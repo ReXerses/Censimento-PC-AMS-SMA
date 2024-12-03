@@ -21,7 +21,7 @@ function ViewPopup({ pc, onClose }) {
           </div>
 
           <div className="primaRiga">
-            <p className="elementoV"><strong>Interno:</strong> {pc.TelInterno}</p>
+            <p className="elementoV"><strong>Interno:</strong> {pc.TelInterno[0]?.numero || "Non disponibile"} - {pc.TelInterno[1]?.numero}</p>
             <p className="elementoV"><strong>Dispositivi Mobili:</strong> {pc.dispositiviMobili ? "Sì" : "No"}</p>
             <p className="elementoV"><strong>VPN Sophos:</strong> {pc.VpnSophos ? "Sì" : "No"}</p>
           </div>

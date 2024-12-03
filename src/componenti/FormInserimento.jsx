@@ -12,7 +12,7 @@ function FormInserimento({gestisciForm}) {
     mansione: "",
     haiPc: false,
     dispositiviMobili: false,
-    TelInterno: "",
+    TelInterno: [],
     SimAziendale: false,
     VpnSophos: false,
     computers: [],
@@ -25,19 +25,27 @@ function FormInserimento({gestisciForm}) {
   const [currentComputer, setCurrentComputer] = useState({
     pc: "",
     modelloPc: "",
+    posizioneMacchina: "",
+    portaEthernet: "",
     MAC: "",
     windows: "",
     windowsUpdate: "",
+    IP: "",
+    DHCP: "",
     CPU: "",
     GPU: "",
     RAM: "",
+    note: "",
     Programmi: [],
   });
 
   const [currentSmart_tablet, setCurrentSmart_tablet] = useState({
     modelloS_T: "",
     seriale: "",
+    IMEI: "",
     MAC: "",
+    IP: "",
+    DHCP: "",
   });
 
   const [currentProgramma, setCurrentProgramma] = useState({
@@ -48,8 +56,14 @@ function FormInserimento({gestisciForm}) {
 
   const [currentSIM, setCurrentSIM] = useState({
     numero: "",
+    pin: "",
+    puk: "",
     promozioneAttiva: "",
     necessita: "",
+  });
+
+  const [currentTelInterno, setCurrentTelInterno] = useState({
+    numero: "",
   });
 
   const [step, setStep] = useState(1);
@@ -81,6 +95,18 @@ function FormInserimento({gestisciForm}) {
     setCurrentSmart_tablet({ ...currentSmart_tablet, [name]: value });
   };
 
+  const handleTelInternoChange = (e) => { const { name, value } = e.target; setCurrentTelInterno({ ...currentTelInterno, [name]: value }); };
+
+  const addTelInterno = () => {
+    if (currentTelInterno.numero) {
+      setFormData((prev) => ({
+        ...prev,
+        TelInterno: [...prev.TelInterno, currentTelInterno],
+      }));
+      setCurrentTelInterno({ numero: "" });
+    }
+  };
+
   const addProgramma = () => {
     if (currentProgramma.programma && currentProgramma.versione) {
       setCurrentComputer((prev) => ({
@@ -97,7 +123,7 @@ function FormInserimento({gestisciForm}) {
         ...prev,
         schedeSIM: [...prev.schedeSIM, currentSIM],
       }));
-      setCurrentSIM({ numero: "", promozioneAttiva: "", necessita: "" });
+      setCurrentSIM({ numero: "", pin:"", puk:"", promozioneAttiva: "", necessita: "" });
     }
   };
   
@@ -108,7 +134,7 @@ function FormInserimento({gestisciForm}) {
         ...prev,
         smart_tablets: [...prev.smart_tablets, currentSmart_tablet],
       }));
-      setCurrentSmart_tablet({ modelloS_T: "", seriale: "", MAC: "" });
+      setCurrentSmart_tablet({ modelloS_T: "", seriale: "", IMEI: "",  MAC: "", IP:"", DHCP:"" });
     }
   };
 
@@ -121,12 +147,16 @@ function FormInserimento({gestisciForm}) {
       setCurrentComputer({
         pc: "",
         modelloPc: "",
+        posizioneMacchina: "",
         MAC: "",
         windows: "",
         windowsUpdate: "",
+        IP: "",
+        DHCP: "",
         CPU: "",
         GPU: "",
         RAM: "",
+        note: "",
         Programmi: [],
       });
     }
@@ -155,7 +185,7 @@ function FormInserimento({gestisciForm}) {
       mansione: "",
       haiPc: false,
       dispositiviMobili: false,
-      TelInterno: "",
+      TelInterno: [],
       SimAziendale: false,
       VpnSophos: false,
       computers: [],
@@ -168,19 +198,26 @@ function FormInserimento({gestisciForm}) {
     setCurrentComputer({
       pc: "",
       modelloPc: "",
+      posizioneMacchina: "",
       MAC: "",
       windows: "",
       windowsUpdate: "",
+      IP: "",
+      DHCP: "",
       CPU: "",
       GPU: "",
       RAM: "",
+      note: "",
       Programmi: [],
     });
 
     setCurrentSmart_tablet({
       modelloS_T: "",
       seriale: "",
+      IMEI: "",
       MAC: "",
+      IP: "",
+      DHCP: "",
     });
 
     setCurrentProgramma({
@@ -191,8 +228,14 @@ function FormInserimento({gestisciForm}) {
 
     setCurrentSIM({
       numero: "",
+      pin: "",
+      puk: "",
       promozioneAttiva: "",
       necessita: "",
+    });
+
+    setCurrentTelInterno({ 
+      numero: "",
     });
 
     setStep(1); // Riporta l'utente allo step iniziale
@@ -241,14 +284,23 @@ function FormInserimento({gestisciForm}) {
                   onChange={handleChange}
                   required
                 />
-                <input
-                  type="number"
-                  name="TelInterno"
-                  placeholder="Tel interno"
-                  value={formData.TelInterno}
-                  onChange={handleChange}
-                />
+
+                <div className="primaRiga">
+                  <input
+                    type="number"
+                    name="numero"
+                    placeholder="Tel interno"
+                    value={currentTelInterno.numero}
+                    onChange={handleTelInternoChange}
+                  />
+
+                </div>
+
+                <button type="button" onClick={addTelInterno}>
+                    Aggiungi Interno
+                </button>
               </div>
+                
               
             </div>
 
@@ -312,7 +364,7 @@ function FormInserimento({gestisciForm}) {
           </>
         )}
 
-        {step === 2 && formData.haiPc && (
+        {step === 2 && /*formData.haiPc &&*/ (
           <>
             
             <h3>Aggiungi Programmi</h3>
@@ -344,9 +396,10 @@ function FormInserimento({gestisciForm}) {
               </div>
               <button type="button" onClick={addProgramma}>
                   Aggiungi Programma
-                </button>
+              </button>
             </div>
-            
+
+
             <h3>Aggiungi Computer</h3>
             <div className="infoBase">
               <div className="primaRiga">
@@ -366,6 +419,24 @@ function FormInserimento({gestisciForm}) {
                 />
                 <input
                   type="text"
+                  name="posizioneMacchina"
+                  placeholder="Posizione Macchina"
+                  value={currentComputer.posizioneMacchina}
+                  onChange={handleComputerChange}
+                />
+
+                <input
+                  type="text"
+                  name="portaEthernet"
+                  placeholder="Porta Ethernet"
+                  value={currentComputer.portaEthernet}
+                  onChange={handleComputerChange}
+                />
+              </div>
+              
+              <div className="primaRiga">
+                <input
+                  type="text"
                   name="MAC"
                   placeholder="MAC"
                   value={currentComputer.MAC}
@@ -378,14 +449,31 @@ function FormInserimento({gestisciForm}) {
                   value={currentComputer.windows}
                   onChange={handleComputerChange}
                 />
-              </div>
-            
-              <div className="secondaRiga">
+
                 <input
                   type="text"
                   name="windowsUpdate"
                   placeholder="Update Windows"
                   value={currentComputer.windowsUpdate}
+                  onChange={handleComputerChange}
+                />
+                <input
+                  type="text"
+                  name="IP"
+                  placeholder="IP"
+                  value={currentComputer.IP}
+                  onChange={handleComputerChange}
+                />
+
+              </div>
+     
+            
+              <div className="secondaRiga">
+                <input
+                  type="text"
+                  name="DHCP"
+                  placeholder="DHCP"
+                  value={currentComputer.DHCP}
                   onChange={handleComputerChange}
                 />
                 <input
@@ -410,6 +498,15 @@ function FormInserimento({gestisciForm}) {
                   onChange={handleComputerChange}
                 />
               </div>
+
+              <div className="secondaRiga">
+                <textarea
+                  name="note"
+                  placeholder="Note"
+                  value={currentComputer.note}
+                  onChange={handleComputerChange}
+                />
+              </div>
             </div>
             <div className="buttonsForm">
               <button type="button" onClick={addComputer}>
@@ -423,7 +520,7 @@ function FormInserimento({gestisciForm}) {
           </>
         )}
 
-        {step === 3 && formData.dispositiviMobili && (
+        {step === 3 /*&& formData.dispositiviMobili*/ && (
           <>
             <h3>Aggiungi Smartphones o Tablets</h3>
             <div className="infoBase">
@@ -444,12 +541,38 @@ function FormInserimento({gestisciForm}) {
                 />
                 <input
                   type="text"
-                  name="MAC"
-                  placeholder="MAC"
-                  value={currentSmart_tablet.MAC}
+                  name="IMEI"
+                  placeholder="IMEI"
+                  value={currentSmart_tablet.IMEI}
                   onChange={handleSmart_TabletChange}
                 />
               </div>
+
+              <div className="primaRiga">
+                  <input
+                    type="text"
+                    name="MAC"
+                    placeholder="MAC"
+                    value={currentSmart_tablet.MAC}
+                    onChange={handleSmart_TabletChange}
+                  />
+
+                  <input
+                    type="text"
+                    name="IP"
+                    placeholder="IP"
+                    value={currentSmart_tablet.IP}
+                    onChange={handleSmart_TabletChange}
+                  />
+                  <input
+                    type="text"
+                    name="DHCP"
+                    placeholder="DHCP"
+                    value={currentSmart_tablet.DHCP}
+                    onChange={handleSmart_TabletChange}
+                  />
+              </div>
+                
             </div>
             <div className="buttonsForm">
               <button type="button" onClick={addSmart_tablet}>
@@ -463,11 +586,12 @@ function FormInserimento({gestisciForm}) {
           </>
         )}
 
-        {step === 4 && formData.SimAziendale && (
+        {step === 4 && /*formData.SimAziendale &&*/ (
           <>
             <h3>Aggiungi SIM</h3>
             <div className="infoBase">
               <div className="primaRiga">
+
                 <input
                   type="text"
                   name="numero"
@@ -476,20 +600,39 @@ function FormInserimento({gestisciForm}) {
                   onChange={handleSIMChange}
                 />
                 <input
-                  type="text"
-                  name="promozioneAttiva"
-                  placeholder="Promozione Attiva"
-                  value={currentSIM.promozioneAttiva}
+                  type="number"
+                  name="pin"
+                  placeholder="PIN"
+                  value={currentSIM.pin}
                   onChange={handleSIMChange}
                 />
                 <input
-                  type="text"
-                  name="necessita"
-                  placeholder="Necessità"
-                  value={currentSIM.necessita}
+                  type="number"
+                  name="puk"
+                  placeholder="PUK"
+                  value={currentSIM.puk}
                   onChange={handleSIMChange}
                 />
+
               </div>
+
+              <div className="primaRiga">
+                <input
+                    type="text"
+                    name="promozioneAttiva"
+                    placeholder="Promozione Attiva"
+                    value={currentSIM.promozioneAttiva}
+                    onChange={handleSIMChange}
+                  />
+                  <input
+                    type="text"
+                    name="necessita"
+                    placeholder="Necessità"
+                    value={currentSIM.necessita}
+                    onChange={handleSIMChange}
+                  />
+              </div>
+                
             </div>
             <div className="buttonsForm">
               <button type="button" onClick={addSIM}>
