@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 
 function FormInserimento({gestisciForm}) {
   const { aggiungiPC } = useContext(PcContext);
+  const [step, setStep] = useState(1);
 
   const [formData, setFormData] = useState({
     id: uuidv4(),
@@ -65,8 +66,6 @@ function FormInserimento({gestisciForm}) {
   const [currentTelInterno, setCurrentTelInterno] = useState({
     numero: "",
   });
-
-  const [step, setStep] = useState(1);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -148,6 +147,7 @@ function FormInserimento({gestisciForm}) {
         pc: "",
         modelloPc: "",
         posizioneMacchina: "",
+        portaEthernet: "",
         MAC: "",
         windows: "",
         windowsUpdate: "",
@@ -199,6 +199,7 @@ function FormInserimento({gestisciForm}) {
       pc: "",
       modelloPc: "",
       posizioneMacchina: "",
+      portaEthernet: "",
       MAC: "",
       windows: "",
       windowsUpdate: "",
@@ -354,6 +355,7 @@ function FormInserimento({gestisciForm}) {
                     onChange={handleChange}
                   />
                 </label>
+
                 <button type="button" onClick={() => setStep(2)}>
                   Avanti
                 </button>
@@ -512,9 +514,16 @@ function FormInserimento({gestisciForm}) {
               <button type="button" onClick={addComputer}>
                 Aggiungi PC
               </button>
-              <button type="button" onClick={() => setStep(3)}>
-                Avanti
-              </button>
+
+              <div className="progressioneForm">
+                <button type="button" onClick={() => setStep(1)}>
+                  Back
+                </button>
+                <button type="button" onClick={() => setStep(3)}>
+                  Next
+                </button>
+              </div>
+              
             </div>
         
           </>
@@ -578,9 +587,15 @@ function FormInserimento({gestisciForm}) {
               <button type="button" onClick={addSmart_tablet}>
                 Aggiungi Dispositivo
               </button>
-              <button type="button" onClick={() => setStep(4)}>
-                Avanti
-              </button>
+
+              <div className="progressioneForm">
+                <button type="button" onClick={() => setStep(2)}>
+                  Back
+                </button>
+                <button type="button" onClick={() => setStep(4)}>
+                  Next
+                </button>
+              </div>
             </div>
             
           </>
@@ -638,9 +653,16 @@ function FormInserimento({gestisciForm}) {
               <button type="button" onClick={addSIM}>
                 Aggiungi SIM
               </button>
-              <button type="button" onClick={() => setStep(5)}>
-                Avanti
-              </button>
+
+              <div className="progressioneForm">
+                <button type="button" onClick={() => setStep(3)}>
+                  Back
+                </button>
+                <button type="button" onClick={() => setStep(5)}>
+                  Next
+                </button>
+              </div>
+
             </div>
             
           </>
