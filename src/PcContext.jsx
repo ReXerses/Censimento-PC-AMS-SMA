@@ -20,8 +20,15 @@ export const PcProvider = ({ children }) => {
     setPcData((prevData) => [...prevData, nuovoPC]);
   };
 
+  const updatePc = (updatedPc) => {
+    setPcData(prevData => 
+      prevData.map(pc => (pc.id === updatedPc.id ? updatedPc : pc))
+    );
+  };
+  
+
   return (
-    <PcContext.Provider value={{ pcData, setPcData, aggiungiPC }}>
+    <PcContext.Provider value={{ pcData, setPcData, aggiungiPC, updatePc }}>
       {children}
     </PcContext.Provider>
   );

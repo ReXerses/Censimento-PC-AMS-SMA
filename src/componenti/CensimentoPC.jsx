@@ -1,20 +1,80 @@
 import React, { useContext, useState } from "react";
 import { PcContext } from "/src/PcContext.jsx";
-import EditPopup from "./EditPopup";
-import ViewPopup from "./ViewPopup";
+import { useNavigate } from "react-router-dom";
+import * as XLSX from 'xlsx';
 
 function CensimentoPC() {
   const { pcData, setPcData } = useContext(PcContext);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isEditing, setIsEditing] = useState(false);
-  const [selectedPC, setSelectedPC] = useState(null);
-  const [isViewing, setIsViewing] = useState(false); // Gestisce il popup di visualizzazione
-  const [selectedPCView, setSelectedPCView] = useState(null); // Memorizza l'oggetto da visualizzare
+  const [deleteConfirm, setDeleteConfirm] = useState(null); // Gestisce il popup di conferma
+  const navigate = useNavigate();
 
-  const handleView = (pc) => {
-    setSelectedPCView(pc);
-    setIsViewing(true);
-  };
+const esportaExcel = (data) => {
+  // Prepara i fogli
+  const foglioDipendenti = data.map((dip) => ({
+    Nome: dip.dipendente,
+    Azienda: dip.azienda,
+    Mansione: dip.mansione,
+    "Possiede PC": dip.haiPc ? "Sì" : "No",
+    "Possiede Dispositivi Mobili": dip.dispositiviMobili ? "Sì" : "No",
+    "Accesso VPN": dip.accessoVPN ? "Sì" : "No"
+  }));
+
+  const foglioPC = data.flatMap((dip) =>
+    dip.computers.map((pc) => ({
+      Dipendente: dip.dipendente,
+      "Numero PC": pc.pc,
+      Modello: pc.modelloPc,
+      Posizione: pc.posizioneMacchina,
+      "Porta Ethernet": pc.portaEthernet,
+      MAC: pc.MAC,
+      IP: pc.IP,
+      DHCP: pc.DHCP,
+      CPU: pc.CPU,
+      GPU: pc.GPU,
+      RAM: pc.RAM,
+      "Windows Versione": pc.windows,
+      "Windows Update": pc.windowsUpdate,
+      Note: pc.note,
+      "Programmi Installati": pc.Programmi.map(
+        (prog) => `${prog.programma} (v${prog.versione})`
+      ).join(", ")
+    }))
+  );
+
+  const foglioDispositivi = data.flatMap((dip) =>
+    dip.smart_tablets.map((device) => ({
+      Dipendente: dip.dipendente,
+      Modello: device.modelloS_T,
+      Seriale: device.seriale,
+      IMEI: device.IMEI,
+      MAC: device.MAC,
+      IP: device.IP,
+      DHCP: device.DHCP
+    }))
+  );
+
+  const foglioSIM = data.flatMap((dip) =>
+    dip.schedeSIM.map((sim) => ({
+      Dipendente: dip.dipendente,
+      "Numero SIM": sim.numero,
+      PIN: sim.pin,
+      PUK: sim.puk,
+      Promozione: sim.promozioneAttiva,
+      Necessità: sim.necessita
+    }))
+  );
+
+  // Crea i fogli di lavoro
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(foglioDipendenti), "Dipendenti");
+  XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(foglioPC), "PC");
+  XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(foglioDispositivi), "Dispositivi Mobili");
+  XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(foglioSIM), "Schede SIM");
+
+  // Scrivi il file Excel
+  XLSX.writeFile(workbook, "CensimentoAziendale.xlsx");
+};
 
   function exportData() {
     const data = localStorage.getItem("pcData");
@@ -59,7 +119,6 @@ function CensimentoPC() {
   }
   
 
-
   const filteredData = pcData.filter(
     (pc) => 
       pc.dipendente.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -67,28 +126,20 @@ function CensimentoPC() {
       String(pc?.schedeSIM?.[0]?.numero || "").includes(searchQuery)
   );
 
+  const handleDeleteConfirm = (id) => {
+    setDeleteConfirm(id); // Memorizza l'ID per il quale è richiesta la conferma
+  };
+
   const handleDelete = (id) => {
-    const updatedPcData = pcData.filter((pc) => pc.id !== id); // Filtra i dati escludendo l'elemento con l'id specificato
-    setPcData(updatedPcData); // Aggiorna lo stato con l'array filtrato
+    const updatedPcData = pcData.filter((pc) => pc.id !== id);
+    setPcData(updatedPcData);
+    setDeleteConfirm(null); // Chiude il popup di conferma
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteConfirm(null); // Chiude il popup di conferma senza eliminare
   };
   
-
-  const handleEdit = (pc) => {
-    setSelectedPC(pc);
-    setIsEditing(true);
-    console.log(pc)
-  };
-
-  const handleSave = (updatedPC) => {
-    setPcData((prevData) =>
-      prevData.map((pc) => (pc.id === updatedPC.id ? updatedPC : pc))
-    );
-    setIsEditing(false);
-    setSelectedPC(null);
-  };
-
-  
-
   return (
     <div className="contenitore">
 
@@ -109,6 +160,8 @@ function CensimentoPC() {
             style={{ display: "inline-block", marginLeft: "10px" }} 
           />
         </div>
+        <button onClick={() => esportaExcel(pcData)}>Esporta in Excel</button>
+
         
       </div>
 
@@ -167,9 +220,10 @@ function CensimentoPC() {
                     
                     <div className="buttons elemento">
 
-                      <button className="elemento edit" type="button" onClick={() => handleEdit(pc)}></button>
-                      <button className="elemento view" type="button" onClick={() => handleView(pc)}></button>
-                      <button className="elemento delete" type="button" onClick={() => handleDelete(pc.id)}></button>
+                    <button className='elemento edit' onClick={() => navigate(`/edit/${pc.id}`)}></button>
+
+                      <button className='elemento view' onClick={() => navigate(`/view/${pc.id}`)}></button>
+                      <button className="elemento delete" type="button" onClick={() => handleDeleteConfirm(pc.id)}></button>
                     </div>
 
                   
@@ -181,19 +235,16 @@ function CensimentoPC() {
           
         </ul>
       )}
-      {isViewing && (
-        <ViewPopup 
-          pc={selectedPCView} 
-          onClose={() => setIsViewing(false)} 
-        />
+      {deleteConfirm && (
+        <div className="popup-overlay">
+          <div className="popup">
+            <p>Sei sicuro di voler eliminare questo dipendente?</p>
+            <button onClick={() => handleDelete(deleteConfirm)}>Conferma</button>
+            <button onClick={handleCancelDelete}>Annulla</button>
+          </div>
+        </div>
       )}
-      {isEditing && (
-        <EditPopup
-          pc={selectedPC}
-          onSave={handleSave}
-          onCancel={() => setIsEditing(false)}
-        />
-      )}
+      
     </div>
   );
 }
